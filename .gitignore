@@ -1,2 +1,6 @@
 .vscode
 sobol
+sobol_dump
+option_pricing
+.venv
+.ipynb_checkpoints

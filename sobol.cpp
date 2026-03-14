@@ -1,3 +1,4 @@
+#include "sobol.hpp"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -9,12 +10,6 @@
 using namespace std;
 #define MSB 32
 
-struct Sobolparams
-{
-    int polynomial;
-    int q;
-    vector<int> minit;
-};
 int rightmostbit(int n)
 {
     int pos = 0;
@@ -55,6 +50,7 @@ vector<Sobolparams> extract_Sobolparams(const string &filename, int dimensions)
     }
     return {};
 }
+
 vector<vector<bool>> Sobolmat(bitset<MSB> c, int q, int r, vector<int> m)
 {
     vector<bool> a(q - 1, 0);
@@ -102,7 +98,7 @@ vector<vector<bool>> Sobolmat(bitset<MSB> c, int q, int r, vector<int> m)
 
     return V;
 }
-vector<vector<double>> Sobolpts(int n0, int npts, int d, vector<Sobolparams> &S)
+vector<vector<double>> Sobolpts(int n0, int npts, int d, const vector<Sobolparams> &S)
 {
     int nmax = npts + n0 - 1;
     int rmax = 1 + floor(log2(nmax));
@@ -157,18 +153,4 @@ vector<vector<double>> Sobolpts(int n0, int npts, int d, vector<Sobolparams> &S)
         }
     }
     return P;
-}
-
-int main()
-{
-    int d = 2;
-    vector<Sobolparams> S = extract_Sobolparams("new-joe-kuo-6.21201", d);
-    vector<vector<double>> P = Sobolpts(1, 256, d, S);
-    ofstream out("sobol.txt");
-    for (int i = 0; i < P.size(); i++)
-    {
-        out << P[i][0] << " " << P[i][1] << "\n";
-    }
-    out.close();
-    return 0;
 }
